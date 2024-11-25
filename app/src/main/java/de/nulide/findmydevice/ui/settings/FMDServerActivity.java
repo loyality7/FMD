@@ -3,6 +3,7 @@ package de.nulide.findmydevice.ui.settings;
 import static de.nulide.findmydevice.ui.UiUtil.setupEdgeToEdgeAppBar;
 import static de.nulide.findmydevice.ui.UiUtil.setupEdgeToEdgeScrollView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -123,6 +124,8 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
 
         PermissionView notificationAccessPerm = findViewById(R.id.perm_notification_access);
         notificationAccessPerm.setPermission(new NotificationAccessPermission(), this, true);
+
+        getServerVersion();
     }
 
     @Override
@@ -329,5 +332,19 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
                     });
                 }
         );
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void getServerVersion() {
+        TextView serverVersion = findViewById(R.id.serverVersion);
+
+        String baseUrl = (String) settings.get(Settings.SET_FMDSERVER_URL);
+        fmdServerRepo.getServerVersion(baseUrl, response -> {
+            serverVersion.setText(getString(R.string.server_version) + ": " + response);
+            serverVersion.setVisibility(View.VISIBLE);
+        }, error -> {
+            // Silently ignore
+            serverVersion.setVisibility(View.GONE);
+        });
     }
 }
