@@ -8,6 +8,8 @@ import de.nulide.findmydevice.utils.SingletonHolder
 import java.io.File
 import java.io.FileReader
 import java.util.LinkedList
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 
 const val TEMP_ALLOWLIST_FILENAME = "temporary_allowlist.json"
@@ -36,6 +38,7 @@ class TemporaryAllowlistRepository private constructor(private val context: Cont
     private val gson = Gson()
 
     private val list: TemporaryAllowlistModel
+    private val lock = ReentrantLock()
 
     init {
         val file = File(context.filesDir, TEMP_ALLOWLIST_FILENAME)
@@ -47,13 +50,13 @@ class TemporaryAllowlistRepository private constructor(private val context: Cont
             ?: TemporaryAllowlistModel()
     }
 
-    private fun saveList() {
+    private fun saveList() = lock.withLock {
         val raw = gson.toJson(list)
         val file = File(context.filesDir, TEMP_ALLOWLIST_FILENAME)
         file.writeText(raw)
     }
 
-    fun containsValidNumber(number: String): Boolean {
+    fun containsValidNumber(number: String): Boolean = lock.withLock {
         for (ele in list) {
             if (PhoneNumberUtils.compare(ele.number, number)) {
                 if (ele.isExpired()) {
@@ -67,7 +70,7 @@ class TemporaryAllowlistRepository private constructor(private val context: Cont
         return false
     }
 
-    fun add(number: String, subscriptionId: Int) {
+    fun add(number: String, subscriptionId: Int) = lock.withLock {
         val now = System.currentTimeMillis()
 
         for (ele in list) {
@@ -88,8 +91,7 @@ class TemporaryAllowlistRepository private constructor(private val context: Cont
     /**
      * Removes all entries that have expired from the temporary allowlist.
      */
-    @Synchronized
-    fun removeExpired(): List<Pair<String, Int>> {
+    fun removeExpired(): List<Pair<String, Int>> = lock.withLock {
         val toRemove = mutableListOf<TempAllowedNumber>()
         for (ele in list) {
             if (ele.isExpired()) {
