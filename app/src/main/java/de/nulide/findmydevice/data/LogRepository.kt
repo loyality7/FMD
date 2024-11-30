@@ -86,6 +86,11 @@ class LogRepository private constructor(private val context: Context) {
         saveList()
     }
 
+    fun clearLog() = lock.withLock {
+        list.clear()
+        saveList()
+    }
+
     fun getLastCrashLog(): LogEntry? = lock.withLock {
         for (e in list.reversed()) {
             if (e.msg.startsWith(CRASH_MSG_HEADER)) {
