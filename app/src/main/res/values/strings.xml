@@ -150,6 +150,8 @@
     <!-- Settings: Logs -->
     <string name="log_view_title">Logs</string>
     <string name="log_view_export">Export Logs</string>
+    <string name="log_view_clear">Clear Logs</string>
+    <string name="log_view_clear_confirm">Do you really want to delete all log entries?</string>
 
     <!-- Settings: About -->
     <string name="about">About</string>
