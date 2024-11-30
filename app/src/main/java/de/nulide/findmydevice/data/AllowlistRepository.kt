@@ -8,6 +8,8 @@ import de.nulide.findmydevice.utils.SingletonHolder
 import java.io.File
 import java.io.FileReader
 import java.util.LinkedList
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 
 private const val ALLOWLIST_FILENAME = "whitelist.json"
@@ -23,6 +25,7 @@ class AllowlistRepository private constructor(private val context: Context) {
     private val gson = Gson()
 
     val list: AllowlistModel
+    private val lock = ReentrantLock()
 
     init {
         val file = File(context.filesDir, ALLOWLIST_FILENAME)
@@ -33,7 +36,7 @@ class AllowlistRepository private constructor(private val context: Context) {
         list = gson.fromJson(reader, AllowlistModel::class.java) ?: AllowlistModel()
     }
 
-    private fun saveList() {
+    private fun saveList() = lock.withLock {
         val raw = gson.toJson(list)
         val file = File(context.filesDir, ALLOWLIST_FILENAME)
         file.writeText(raw)
@@ -43,7 +46,7 @@ class AllowlistRepository private constructor(private val context: Context) {
         return containsNumber(c.number)
     }
 
-    fun containsNumber(number: String): Boolean {
+    fun containsNumber(number: String): Boolean = lock.withLock {
         for (ele in list) {
             if (PhoneNumberUtils.compare(ele.number, number)) {
                 return true
@@ -52,15 +55,14 @@ class AllowlistRepository private constructor(private val context: Context) {
         return false
     }
 
-    fun add(c: Contact) {
+    fun add(c: Contact) = lock.withLock {
         if (!contains(c)) {
             list.add(c)
             saveList()
         }
     }
 
-    @Synchronized
-    fun remove(phoneNumber: String) {
+    fun remove(phoneNumber: String) = lock.withLock {
         val toRemove = mutableListOf<Contact>()
         for (ele in list) {
             if (PhoneNumberUtils.compare(ele.number, phoneNumber)) {
