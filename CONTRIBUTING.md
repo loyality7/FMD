@@ -1,6 +1,6 @@
-# Contributing to FindMyDevice
+# Contributing to FMD
 
-Thanks for taking the time to improve FindMyDevice!
+Thanks for taking the time to improve FMD!
 
 Contributions in all fields of development are welcome.
 
