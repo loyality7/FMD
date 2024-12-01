@@ -79,9 +79,6 @@ public class FMDServerLocationUploadService extends FmdJobService {
 
         settings = SettingsRepository.Companion.getInstance(this);
 
-        Transport<Unit> transport = new FmdServerTransport(this, "Regular Background Upload");
-        CommandHandler<Unit> commandHandler = new CommandHandler<>(transport, this.getCoroutineScope(), this, false);
-
         if (!settings.serverAccountExists()) {
             FmdLogKt.log(this).i(TAG, "No account, stopping and cancelling job.");
             cancelJob(this);
@@ -93,6 +90,9 @@ public class FMDServerLocationUploadService extends FmdJobService {
             jobFinished();
             return false;
         }
+
+        Transport<Unit> transport = new FmdServerTransport(this, "Regular Background Upload");
+        CommandHandler<Unit> commandHandler = new CommandHandler<>(transport, this.getCoroutineScope(), this, false);
 
         String locateCommand = settings.get(Settings.SET_FMD_COMMAND) + " locate";
         switch ((Integer) settings.get(Settings.SET_FMDSERVER_LOCATION_TYPE)) {
