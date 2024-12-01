@@ -79,7 +79,7 @@ public class FMDServerLocationUploadService extends FmdJobService {
 
         settings = SettingsRepository.Companion.getInstance(this);
 
-        Transport<Unit> transport = new FmdServerTransport(this);
+        Transport<Unit> transport = new FmdServerTransport(this, "Regular Background Upload");
         CommandHandler<Unit> commandHandler = new CommandHandler<>(transport, this.getCoroutineScope(), this, false);
 
         if (!settings.serverAccountExists()) {
