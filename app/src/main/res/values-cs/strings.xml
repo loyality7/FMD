@@ -252,4 +252,7 @@
     <string name="appearance_theme_follow_system">Podle systému</string>
     <string name="appearance_theme_dark">Tmavý</string>
     <string name="Settings_FMDServer_Logout_Text">Opravdu se chcete odhlásit z vašeho účtu na serveru FMD?</string>
+    <string name="crashed_title">Hlášení o pádu</string>
+    <string name="server_version_upgrade_required_title">Vyžadována aktualizace serveru FMD</string>
+    <string name="server_version_upgrade_required_text">Server FMD, který používáte, má verzi {CURRENT}, ale tato aplikace vyžaduje alespoň {MIN}. Ovládání zařízení prostřednictvím serveru FMD již nemusí fungovat. Prosíme, aktualizujte svůj server.</string>
 </resources>
