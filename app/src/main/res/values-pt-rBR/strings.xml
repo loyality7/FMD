@@ -252,4 +252,7 @@
     <string name="appearance_theme_choose">Escolher tema</string>
     <string name="appearance_theme_light">Claro</string>
     <string name="Settings_FMDServer_Logout_Text">Você deseja realmente remover sua sessão da sua conta do Servidor FMD?</string>
+    <string name="server_version_upgrade_required_title">Atualização do FMD Server necessária</string>
+    <string name="server_version_upgrade_required_text">O Servidor FMD que você está usando está na versão {CURRENT}, mas o app requer que esteja no mínimo na {MIN}. Pode ser que controlar seu dispositivo pelo Servidor FMD não funcione mais. Por favor atualize seu servidor.</string>
+    <string name="crashed_title">Relatório de Erro</string>
 </resources>
