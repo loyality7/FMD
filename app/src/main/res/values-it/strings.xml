@@ -240,4 +240,7 @@
     <string name="appearance_theme_follow_system">Come da Sistema</string>
     <string name="appearance_theme_light">Chiaro</string>
     <string name="Settings_FMDServer_Logout_Text">Vuoi davvero disconnetterti dal tuo account sul Server FMD?</string>
+    <string name="server_version_upgrade_required_title">Necessario aggiornamento del server FMD</string>
+    <string name="server_version_upgrade_required_text">Il server FMD in uso ha la versione {CURRENT}, ma questa applicazione richiede almeno {MIN}. Il controllo del dispositivo tramite il server FMD potrebbe non funzionare più. Aggiorna il server.</string>
+    <string name="crashed_title">Rapporto anomalia</string>
 </resources>

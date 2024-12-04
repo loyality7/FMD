@@ -252,4 +252,7 @@
     <string name="appearance_theme_light">Claro</string>
     <string name="appearance_theme_dark">Oscuro</string>
     <string name="Settings_FMDServer_Logout_Text">¿Está seguro de que desea cerrar sesión en su cuenta de FMD Server?</string>
+    <string name="crashed_title">Informe de errores</string>
+    <string name="server_version_upgrade_required_title">Se requiere actualización del servidor FMD</string>
+    <string name="server_version_upgrade_required_text">El servidor FMD que estás usando tiene la versión {CURRENT}, pero esta aplicación requiere al menos {MIN}. Es posible que el control de tu dispositivo a través del servidor FMD ya no funcione. Actualiza tu servidor.</string>
 </resources>

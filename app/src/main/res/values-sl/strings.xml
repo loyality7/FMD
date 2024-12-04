@@ -252,4 +252,7 @@
     <string name="appearance_theme">Tema</string>
     <string name="appearance_theme_choose">Izberi temo</string>
     <string name="Settings_FMDServer_Logout_Text">Ali se res želite odjaviti iz svojega računa na FMD strežniku?</string>
+    <string name="server_version_upgrade_required_title">Zahtevana je nadgradnja FMD strežnika</string>
+    <string name="crashed_title">Poročilo o zrušitvi</string>
+    <string name="server_version_upgrade_required_text">Različica FMD strežnika, ki ga uporabljate, je {CURRENT}. Ta aplikacija pa zahteva vsaj različico {MIN}. Upravljanje vaše naprave prek FMD strežnika morda ne bo več delovalo. Prosim, nadgradite svoj FMD strežnik.</string>
 </resources>
