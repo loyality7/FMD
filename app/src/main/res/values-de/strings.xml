@@ -269,4 +269,7 @@
     <string name="appearance_theme_light">Hell</string>
     <string name="appearance_dynamic_colors">Dynamische Farben</string>
     <string name="Settings_FMDServer_Logout_Text">Möchten Sie sich wirklich aus Ihrem FMD Server-Account ausloggen?</string>
+    <string name="crashed_title">Absturzbericht</string>
+    <string name="server_version_upgrade_required_title">FMD Server muss geupdated werden</string>
+    <string name="server_version_upgrade_required_text">Der genutzte FMD Server ist Version {CURRENT}, aber diese App benötigt mindestens {MIN}. Die Steuerung dieses Geräts mit diesem Server könnte beeinträchtigt sein. Bitte den Server updaten.</string>
 </resources>
