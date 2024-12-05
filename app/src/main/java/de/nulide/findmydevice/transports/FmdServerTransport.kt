@@ -13,7 +13,12 @@ import de.nulide.findmydevice.ui.settings.AddAccountActivity
 import de.nulide.findmydevice.utils.Utils
 
 
-class FmdServerTransport(context: Context) : Transport<Unit>(Unit) {
+class FmdServerTransport(
+    context: Context,
+    private val destination: String,
+) : Transport<Unit>(Unit) {
+
+    constructor(context: Context) : this(context, "FMD Server")
 
     private val repo = FMDServerApiRepository.getInstance(FMDServerApiRepoSpec(context))
 
@@ -38,7 +43,7 @@ class FmdServerTransport(context: Context) : Transport<Unit>(Unit) {
         activity.startActivity(Intent(context, AddAccountActivity::class.java))
     })
 
-    override fun getDestinationString() = "FMD Server"
+    override fun getDestinationString() = destination
 
     @SuppressLint("MissingSuperCall")
     override fun send(context: Context, msg: String) {

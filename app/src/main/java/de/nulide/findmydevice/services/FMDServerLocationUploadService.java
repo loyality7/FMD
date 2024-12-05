@@ -49,9 +49,12 @@ public class FMDServerLocationUploadService extends FmdJobService {
 
         // We cannot use setPeriodic() because that only works for periods >= 15 mins
         // builder.setPeriodic(intervalMinutes * 60 * 1000);
-        // Instead we use setMinimumLatency() and setOverrideDeadline()
-        // We add 2 mins to give the system some scheduling flexibility
+        // Instead we use setMinimumLatency().
         builder.setMinimumLatency(delayMinutes * 60 * 1000);
+
+        // Force the job to run within a 2 minute window, even if its constraints aren't satisfied.
+        // This is to (hopefully) improve reliability and timeliness.
+        // We can abort the job later if there is no network connection.
         builder.setOverrideDeadline(((delayMinutes + 2) * 60 * 1000));
 
         builder.setPersisted(true);
@@ -79,9 +82,6 @@ public class FMDServerLocationUploadService extends FmdJobService {
 
         settings = SettingsRepository.Companion.getInstance(this);
 
-        Transport<Unit> transport = new FmdServerTransport(this);
-        CommandHandler<Unit> commandHandler = new CommandHandler<>(transport, this.getCoroutineScope(), this, false);
-
         if (!settings.serverAccountExists()) {
             FmdLogKt.log(this).i(TAG, "No account, stopping and cancelling job.");
             cancelJob(this);
@@ -89,10 +89,13 @@ public class FMDServerLocationUploadService extends FmdJobService {
         }
 
         if (!NetworkUtils.isNetworkAvailable(this)) {
-            FmdLogKt.log(this).i(TAG, "No network connection, stopping job. Why did Android even schedule it?");
+            FmdLogKt.log(this).i(TAG, "No network connection, stopping job.");
             jobFinished();
             return false;
         }
+
+        Transport<Unit> transport = new FmdServerTransport(this, "Regular Background Upload");
+        CommandHandler<Unit> commandHandler = new CommandHandler<>(transport, this.getCoroutineScope(), this, false);
 
         String locateCommand = settings.get(Settings.SET_FMD_COMMAND) + " locate";
         switch ((Integer) settings.get(Settings.SET_FMDSERVER_LOCATION_TYPE)) {
