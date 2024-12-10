@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.data.LogRepository
 import de.nulide.findmydevice.ui.FmdActivity
@@ -19,6 +20,9 @@ class LogViewActivity : FmdActivity() {
 
     private lateinit var repo: LogRepository
 
+    private lateinit var adapter: LogViewAdapter
+    private lateinit var recyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log)
@@ -29,8 +33,8 @@ class LogViewActivity : FmdActivity() {
         repo = LogRepository.getInstance(this)
 
         // TODO: Observe list as LiveData or Flow
-        val adapter = LogViewAdapter()
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_logs)
+        adapter = LogViewAdapter()
+        recyclerView = findViewById<RecyclerView>(R.id.recycler_logs)
         recyclerView.adapter = adapter
 
         adapter.submitList(repo.list)
@@ -43,11 +47,23 @@ class LogViewActivity : FmdActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menuLogView) {
+        if (item.itemId == R.id.menuExportLog) {
             val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
             intent.putExtra(Intent.EXTRA_TITLE, LogRepository.filenameForExport())
-            intent.setType("*/*")
+            intent.type = "*/*"
             startActivityForResult(intent, EXPORT_REQ_CODE)
+        } else if (item.itemId == R.id.menuClearLog) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.log_view_clear))
+                .setMessage(R.string.log_view_clear_confirm)
+                .setPositiveButton(getString(R.string.Ok), { dialog, button ->
+                    repo.clearLog()
+                    // TODO: let adapter observe list, instead of explicitly updating the adapter
+                    adapter.submitList(repo.list)
+                    recyclerView.scrollToPosition(0)
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show()
         }
         return super.onOptionsItemSelected(item)
     }
