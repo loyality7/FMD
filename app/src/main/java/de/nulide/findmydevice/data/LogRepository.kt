@@ -13,8 +13,6 @@ import java.io.FileReader
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.LinkedList
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
 import kotlin.math.max
 
 
@@ -47,13 +45,6 @@ class LogRepository private constructor(private val context: Context) {
 
     val list: LogModel
 
-    // All functions that iterate over the list or modify it should use the lock.
-    // It can happen that a first thread is already saving the list (gson.toJson internally uses an iterator)
-    // while a second thread is calling list.sublist().clear().
-    // This causes a ConcurrentModificationException.
-    // See https://gitlab.com/Nulide/findmydevice/-/issues/262.
-    private val lock = ReentrantLock()
-
     init {
         val file = File(context.filesDir, LOG_FILENAME)
         if (!file.exists()) {
@@ -63,20 +54,25 @@ class LogRepository private constructor(private val context: Context) {
         list = gson.fromJson(reader, LogModel::class.java) ?: LogModel()
     }
 
-    private fun saveList() = lock.withLock {
+    private fun saveList() {
         val raw = gson.toJson(list)
-
         val file = File(context.filesDir, LOG_FILENAME)
         file.writeText(raw)
     }
 
-    fun add(new: LogEntry) = lock.withLock {
+    fun add(new: LogEntry) {
         list.add(new)
         pruneLog()
         // no need to save, pruneLog() saves
     }
 
-    fun pruneLog() = lock.withLock {
+    // Synchronise log pruning because the LogRepository is a singleton.
+    // It can happen that a first thread is already saving the list (gson.toJson internally uses an iterator)
+    // while a second thread is calling list.sublist().clear().
+    // This causes a ConcurrentModificationException.
+    // See https://gitlab.com/Nulide/findmydevice/-/issues/262
+    @Synchronized
+    fun pruneLog() {
         val maxLength = 1000
         val newStart = max(0, list.size - maxLength)
 
@@ -86,7 +82,7 @@ class LogRepository private constructor(private val context: Context) {
         saveList()
     }
 
-    fun getLastCrashLog(): LogEntry? = lock.withLock {
+    fun getLastCrashLog(): LogEntry? {
         for (e in list.reversed()) {
             if (e.msg.startsWith(CRASH_MSG_HEADER)) {
                 return e
