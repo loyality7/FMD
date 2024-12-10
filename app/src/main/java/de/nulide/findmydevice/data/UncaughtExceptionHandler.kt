@@ -77,7 +77,7 @@ class UncaughtExceptionHandler(
     private fun getAppVersion(): String {
         try {
             val info = context.packageManager.getPackageInfo(context.packageName, 0)
-            return info.versionName
+            return info.versionName ?: "??"
         } catch (nameNotFoundException: PackageManager.NameNotFoundException) {
             nameNotFoundException.printStackTrace()
             return "??"
