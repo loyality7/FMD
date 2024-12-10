@@ -252,4 +252,7 @@
     <string name="appearance_theme_follow_system">Как в системе (по умолчанию)</string>
     <string name="appearance_theme_dark">Тёмная</string>
     <string name="Settings_FMDServer_Logout_Text">Вы действительно хотите выйти из вашего аккаунта FMD Сервера?</string>
+    <string name="server_version_upgrade_required_title">Необходимо обновить FMD Сервер</string>
+    <string name="server_version_upgrade_required_text">Используемый вами FMD Сервер имеет версию {CURRENT}, но это приложение требует как минимум версию {MIN}. Управление вашим устройством через FMD Сервер может больше не работать. Пожалуйста, обновите ваш сервер.</string>
+    <string name="crashed_title">Отчёт об ошибке</string>
 </resources>
