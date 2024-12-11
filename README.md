@@ -20,7 +20,7 @@ If you like FMD and want to support it, spread the word or donate.
 
 ## Wiki
 
-The wiki can be found [here](https://gitlab.com/Nulide/findmydevice/-/wikis/home).
+The wiki can be found [here](https://gitlab.com/loyality7/findmydevice/-/wikis/home).
 
 ## Contribute
 
